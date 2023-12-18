@@ -17,7 +17,7 @@ class Account
         }
     }
 
-    public void Deposit(decimal amount)
+    public void Deposit(decimal amount)      - Метод Deposit позволяет пополнить баланс счета. Он использует блокировку операции записи для обеспечения безопасности при многопоточном доступе к балансу счета.
     {
         lock (lockObject)
         {
@@ -26,7 +26,7 @@ class Account
         }
     }
 
-    public void Withdraw(decimal amount)
+    public void Withdraw(decimal amount)   Метод Withdraw позволяет снять деньги со счета. Он также использует блокировку операции записи для обеспечения безопасности при многопоточном доступе к балансу счета
     {
         lock (lockObject)
         {
@@ -42,8 +42,8 @@ class Account
         }
     }
 
-    public bool WaitForBalance(decimal targetBalance, int timeout)
-    {
+    public bool WaitForBalance(decimal targetBalance, int timeout)   - Метод WaitForBalance позволяет ожидать достижения требуемой суммы на счете в течение указанного времени. 
+    { 
         DateTime startTime = DateTime.Now;
         while (Balance < targetBalance)
         {
