@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 
 class Account
@@ -12,46 +12,47 @@ class Account
         {
             lock (lockObject)
             {
-                return balance;
+                return balance; // Возвращает текущий баланс счета, используя блокировку операции чтения
             }
         }
     }
 
-    public void Deposit(decimal amount)      - Метод Deposit позволяет пополнить баланс счета. Он использует блокировку операции записи для обеспечения безопасности при многопоточном доступе к балансу счета.
+    public void Deposit(decimal amount)
     {
         lock (lockObject)
         {
             balance += amount;
-            Console.WriteLine($"Баланс пополнен на {amount}. Текущий баланс: {balance}");
+            Console.WriteLine($"Баланс пополнен на {amount}. Текущий баланс: {balance}"); // Пополняет баланс на указанную сумму и выводит информацию о новом балансе
         }
     }
 
-    public void Withdraw(decimal amount)   Метод Withdraw позволяет снять деньги со счета. Он также использует блокировку операции записи для обеспечения безопасности при многопоточном доступе к балансу счета
+    public void Withdraw(decimal amount)
     {
         lock (lockObject)
         {
             if (balance >= amount)
             {
                 balance -= amount;
-                Console.WriteLine($"Со счета снято {amount}. Текущий баланс: {balance}");
+                Console.WriteLine($"Со счета снято {amount}. Текущий баланс: {balance}"); // Снимает указанную сумму со счета и выводит информацию о новом балансе
             }
             else
             {
-                Console.WriteLine("Недостаточно средств на счете.");
+                Console.WriteLine("Недостаточно средств на счете."); // Выводит сообщение об отсутствии достаточных средств на счете
             }
         }
     }
 
-    public bool WaitForBalance(decimal targetBalance, int timeout)   - Метод WaitForBalance позволяет ожидать достижения требуемой суммы на счете в течение указанного времени. 
-    { 
+    public bool WaitForBalance(decimal targetBalance, int timeout)
+    {
         DateTime startTime = DateTime.Now;
         while (Balance < targetBalance)
         {
             if (DateTime.Now - startTime >= TimeSpan.FromMilliseconds(timeout))
-                return false;
-            Thread.Sleep(100); // пауза между проверками
+                return false; // Если время ожидания истекло, возвращает false
+
+            Thread.Sleep(100); // Пауза между проверками
         }
-        return true;
+        return true; // Если требуемый баланс достигнут, возвращает true
     }
 }
 
@@ -69,7 +70,7 @@ class BankApp
             {
                 decimal depositAmount = random.Next(100, 1000);
                 account.Deposit(depositAmount);
-                Thread.Sleep(500); // пауза между пополнениями
+                Thread.Sleep(500); // Пауза между пополнениями
             }
         });
         depositThread.Start();
@@ -82,9 +83,9 @@ class BankApp
         }
         else
         {
-            Console.WriteLine($"Не удалось накопить требуемую сумму {targetWithdrawalAmount}.");
+            Console.WriteLine($"Не удалось накопить требуемую сумму {targetWithdrawalAmount}."); // Выводит сообщение о неудаче при накоплении требуемой суммы
         }
 
-        Console.WriteLine($"Остаток на балансе: {account.Balance}");
+        Console.WriteLine($"Остаток на балансе: {account.Balance}"); // Выводит текущий остаток на балансе
     }
 }
